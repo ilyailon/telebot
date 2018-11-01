@@ -9,7 +9,7 @@ from collections import Counter
 bot = telebot.TeleBot(config.access_token)
 
 response =\
-    requests.get('http://www.ifmo.ru/ru//schedule/raspisanie_zanyatiy.htm') #находим список групп по тэгу, если вводишь чушь, то выдает false
+    requests.get('http://www.ifmo.ru/ru//schedule/raspisanie_zanyatiy.htm')
 soup = BeautifulSoup(response.text, "html5lib")
 groups = soup.find("div", attrs={"id": "content"})
 groups_list = groups.find_all("a")
@@ -57,13 +57,12 @@ def parse_schedule_for_anyday(web_page, day):
                         for lesson_info in lessons_list]
         for num_element in range(len(lessons_list)):
             lessons_list[num_element] =\
-                lessons_list[num_element].replace('\n', '').replace('\t', '') #зареплейсили табулящию и переход на новую строку тоже
-
+                lessons_list[num_element].replace('\n', '').replace('\t', '')
         classrooms_list = schedule_table.find_all("td",
                                                   attrs={"class": "room"})
         classrooms_list = [classroom.dd.text for classroom in classrooms_list]
 
-        notes_list = schedule_table.find_all("td", attrs={"class": "time"}) #вывод по красоте (четная или нечетная неделя)
+        notes_list = schedule_table.find_all("td", attrs={"class": "time"})
         notes_list = [note.dt.text for note in notes_list]
 
         return times_list, notes_list, locations_list, lessons_list,\
@@ -211,7 +210,6 @@ def get_near_lesson(message):
 
 @bot.message_handler(commands=['tommorow'])
 def get_tommorow(message):
-    """ Получить расписание на следующий день """
     whitespaces = message.text.count(' ')
     if whitespaces != 1:
         return None
@@ -279,7 +277,7 @@ def get_all_schedule(message):
     translation = ['Понедельник',
                    'Вторник',
                    'Среда',
-                   'Четверг!',
+                   'Четверг',
                    'Пятница',
                    'Суббота']
 
